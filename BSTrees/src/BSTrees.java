@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -14,40 +15,56 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-public class BSTrees{
+public class BSTrees {
 	public static void main(String[] args) {
-		BSTree tree = new BSTree();
-		tree.insert(36);
-		tree.insert(22);
-		tree.insert(10);
-		tree.insert(44);
-		tree.insert(42);
-		tree.insert(16);
-		tree.insert(25);
-		tree.insert(3);
-		tree.insert(23);
-		tree.insert(24);
-		tree.remove(42);
-		tree.remove(23);
-		tree.remove(22);
-		tree.preOrder();
-		GuiSetup guiSetup = new GuiSetup();
+		final BSTree tree = new BSTree();
+		
+		final GuiSetup gui = new GuiSetup();
+		gui.outputTextPane.setText("Inorder:\nPostorder:\nPreorder:");
+		gui.btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int input = Integer.parseInt(gui.inputTextField.getText());
+					tree.insert(input);
+					gui.outputTextPane.setText("Inorder:        "+tree.inOrder()+"\nPostorder:    "+tree.postOrder()+"\nPreorder:      "+tree.preOrder());
+					gui.inputTextField.setText("");
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(gui,"Invalid Input","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		gui.btnRemove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int input = Integer.parseInt(gui.inputTextField.getText());
+					tree.remove(input);
+					gui.outputTextPane.setText("Inorder:        "+tree.inOrder()+"\nPostorder:    "+tree.postOrder()+"\nPreorder:      "+tree.preOrder());
+					gui.inputTextField.setText("");
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(gui,"Invalid Input","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 	}
 }
+
 class BSTree {
 
 	protected BSTNode rootnode; // define root node
-
+	public String inOrder="";
+	public String preOrder="";
+	public String postOrder="";
 	class BSTNode {
 		public BSTNode left;
 		public BSTNode right;
 		public BSTNode root;
 		public int value;
-
 		public BSTNode(int k) {
 			left = right = root = null; // initially set left, right and root to
 										// null
-
 			value = k;
 		}
 
@@ -197,26 +214,34 @@ class BSTree {
 			find(n.right);
 		}
 	}
-	public void preOrder() {
-        preOrderTraversal(rootnode);
-     }
 
-     public void preOrderTraversal(BSTNode node) {
-        if (node!= null) {
-           System.out.println(node.value);
-           preOrderTraversal(node.left);
-           preOrderTraversal(node.right);
-        }
-     }
-	public void postOrder() {
+	String preOrder() {
+		preOrder="";
+		preOrderTraversal(rootnode);
+		return preOrder;
+	}
+
+	public void preOrderTraversal(BSTNode node) {
+		if (node != null) {
+//			System.out.println(node.value);
+			preOrder=preOrder+node.value+" ";
+			preOrderTraversal(node.left);
+			preOrderTraversal(node.right);
+		}
+	}
+
+	public String postOrder() {
+		postOrder="";
 		postOrderTraversal(rootnode);
+		return postOrder;
 	}
 
 	private void postOrderTraversal(BSTNode node) {
 		if (node != null) {
 			postOrderTraversal(node.left);
 			postOrderTraversal(node.right);
-			System.out.println(node.value);
+//			System.out.println(node.value);
+			postOrder=postOrder+node.value+" ";
 		}
 	}
 
@@ -224,22 +249,25 @@ class BSTree {
 	private void inOrder(BSTNode node) {
 		if (node != null) {
 			inOrder(node.left);
-			System.out.println(node.value);
+			inOrder=inOrder+node.value+" ";
+//			System.out.println(node.value);
 			inOrder(node.right);
 		}
 	}
 
-	void inOrder() {
+	String inOrder() {
+		inOrder="";
 		inOrder(rootnode);
+		return inOrder;
 	}
 
 	// Check for Tree is Empty or not
-
 	boolean isEmpty() {
 		return rootnode == null;
 	}
 }
-class GuiSetup extends JFrame{
+
+class GuiSetup extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public JTextField inputTextField;
 	public JButton btnAdd;
@@ -262,34 +290,34 @@ class GuiSetup extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
+
 		JPanel inputPanel = new JPanel();
 		contentPane.add(inputPanel, BorderLayout.SOUTH);
-		
+
 		inputTextField = new JTextField();
 		inputPanel.add(inputTextField);
 		inputTextField.setColumns(10);
-		
+
 		btnAdd = new JButton("Insert");
 		inputPanel.add(btnAdd);
-		
+
 		btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		inputPanel.add(btnRemove);
-		
+
 		JPanel bottomPanel = new JPanel();
 		contentPane.add(bottomPanel, BorderLayout.CENTER);
 		bottomPanel.setLayout(new CardLayout(0, 0));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		bottomPanel.add(scrollPane, "");
-		
+
 		outputTextPane = new JTextPane();
 		scrollPane.setViewportView(outputTextPane);
-		
+
 		setTitle("Merge Sort");
 		setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 4),
 				Toolkit.getDefaultToolkit().getScreenSize().height / 2);
