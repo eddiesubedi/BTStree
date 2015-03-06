@@ -1,6 +1,21 @@
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+
 public class BSTrees{
 	public static void main(String[] args) {
-		//I CHANGED SOME SHIT
 		BSTree tree = new BSTree();
 		tree.insert(36);
 		tree.insert(22);
@@ -16,6 +31,7 @@ public class BSTrees{
 		tree.remove(23);
 		tree.remove(22);
 		tree.preOrder();
+		GuiSetup guiSetup = new GuiSetup();
 	}
 }
 class BSTree {
@@ -221,5 +237,66 @@ class BSTree {
 
 	boolean isEmpty() {
 		return rootnode == null;
+	}
+}
+class GuiSetup extends JFrame{
+	private static final long serialVersionUID = 1L;
+	public JTextField inputTextField;
+	public JButton btnAdd;
+	public JButton btnRemove;
+	public JTextPane outputTextPane;
+
+	public GuiSetup() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+
+		}
+		getContentPane().setLayout(new CardLayout());
+		setupGUI();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private void setupGUI() {
+		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JPanel inputPanel = new JPanel();
+		contentPane.add(inputPanel, BorderLayout.SOUTH);
+		
+		inputTextField = new JTextField();
+		inputPanel.add(inputTextField);
+		inputTextField.setColumns(10);
+		
+		btnAdd = new JButton("Insert");
+		inputPanel.add(btnAdd);
+		
+		btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		inputPanel.add(btnRemove);
+		
+		JPanel bottomPanel = new JPanel();
+		contentPane.add(bottomPanel, BorderLayout.CENTER);
+		bottomPanel.setLayout(new CardLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		bottomPanel.add(scrollPane, "");
+		
+		outputTextPane = new JTextPane();
+		scrollPane.setViewportView(outputTextPane);
+		
+		setTitle("Merge Sort");
+		setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 4),
+				Toolkit.getDefaultToolkit().getScreenSize().height / 2);
+		setVisible(true);
+		setResizable(true);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height
+				/ 2 - this.getSize().height / 2);
 	}
 }
