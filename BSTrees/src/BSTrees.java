@@ -1,5 +1,6 @@
 public class BSTrees{
 	public static void main(String[] args) {
+		//I CHANGED SOME SHIT
 		BSTree tree = new BSTree();
 		tree.insert(36);
 		tree.insert(22);
