@@ -1,14 +1,22 @@
-
-public class BSTrees {
+public class BSTrees{
 	public static void main(String[] args) {
 		BSTree tree = new BSTree();
-		tree.insert(4);
-		tree.insert(5);
-		tree.insert(6);
-		tree.inOrder();
+		tree.insert(36);
+		tree.insert(22);
+		tree.insert(10);
+		tree.insert(44);
+		tree.insert(42);
+		tree.insert(16);
+		tree.insert(25);
+		tree.insert(3);
+		tree.insert(23);
+		tree.insert(24);
+		tree.remove(42);
+		tree.remove(23);
+		tree.remove(22);
+		tree.preOrder();
 	}
 }
-
 class BSTree {
 
 	protected BSTNode rootnode; // define root node
@@ -172,17 +180,36 @@ class BSTree {
 			find(n.right);
 		}
 	}
+	public void preOrder() {
+        preOrderTraversal(rootnode);
+     }
+
+     public void preOrderTraversal(BSTNode node) {
+        if (node!= null) {
+           System.out.println(node.value);
+           preOrderTraversal(node.left);
+           preOrderTraversal(node.right);
+        }
+     }
+	public void postOrder() {
+		postOrderTraversal(rootnode);
+	}
+
+	private void postOrderTraversal(BSTNode node) {
+		if (node != null) {
+			postOrderTraversal(node.left);
+			postOrderTraversal(node.right);
+			System.out.println(node.value);
+		}
+	}
 
 	// Returns tree in INORDER traversal
-	private int inOrder(BSTNode node) {
-		int returnThis=-1;
+	private void inOrder(BSTNode node) {
 		if (node != null) {
 			inOrder(node.left);
-			returnThis = node.value;
-//			System.out.println(node.value);
+			System.out.println(node.value);
 			inOrder(node.right);
 		}
-		return returnThis;
 	}
 
 	void inOrder() {
