@@ -21,7 +21,22 @@ public class BSTrees {
 		
 		final GuiSetup gui = new GuiSetup();
 		gui.outputTextPane.setText("Inorder:\nPostorder:\nPreorder:");
+
 		gui.btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int input = Integer.parseInt(gui.inputTextField.getText());
+					tree.insert(input);
+					gui.outputTextPane.setText("Inorder:        "+tree.inOrder()+"\nPostorder:    "+tree.postOrder()+"\nPreorder:      "+tree.preOrder());
+					gui.inputTextField.setText("");
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(gui,"Invalid Input","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		gui.inputTextField.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -48,15 +63,22 @@ public class BSTrees {
 				}
 			}
 		});
+		gui.btnClear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gui.outputTextPane.setText("Inorder:\nPostorder:\nPreorder:");
+			}
+		});
 	}
 }
 
 class BSTree {
 
 	protected BSTNode rootnode; // define root node
-	public String inOrder="";
-	public String preOrder="";
-	public String postOrder="";
+	public String inOrder="";//to store the data so u can return it
+	public String preOrder="";// "" "" "" "" ""
+	public String postOrder="";// "" "" "" "" ""
 	class BSTNode {
 		public BSTNode left;
 		public BSTNode right;
@@ -217,31 +239,31 @@ class BSTree {
 
 	String preOrder() {
 		preOrder="";
-		preOrderTraversal(rootnode);
+		preOrder(rootnode);
 		return preOrder;
 	}
 
-	public void preOrderTraversal(BSTNode node) {
+	public void preOrder(BSTNode node) {
 		if (node != null) {
 //			System.out.println(node.value);
-			preOrder=preOrder+node.value+" ";
-			preOrderTraversal(node.left);
-			preOrderTraversal(node.right);
+			preOrder=preOrder+node.value+" , ";
+			preOrder(node.left);
+			preOrder(node.right);
 		}
 	}
 
 	public String postOrder() {
 		postOrder="";
-		postOrderTraversal(rootnode);
+		postOrder(rootnode);
 		return postOrder;
 	}
 
-	private void postOrderTraversal(BSTNode node) {
+	private void postOrder(BSTNode node) {
 		if (node != null) {
-			postOrderTraversal(node.left);
-			postOrderTraversal(node.right);
+			postOrder(node.left);
+			postOrder(node.right);
 //			System.out.println(node.value);
-			postOrder=postOrder+node.value+" ";
+			postOrder=postOrder+node.value+" , ";
 		}
 	}
 
@@ -249,7 +271,7 @@ class BSTree {
 	private void inOrder(BSTNode node) {
 		if (node != null) {
 			inOrder(node.left);
-			inOrder=inOrder+node.value+" ";
+			inOrder=inOrder+node.value+" , ";
 //			System.out.println(node.value);
 			inOrder(node.right);
 		}
@@ -273,6 +295,7 @@ class GuiSetup extends JFrame {
 	public JButton btnAdd;
 	public JButton btnRemove;
 	public JTextPane outputTextPane;
+	public JButton btnClear;
 
 	public GuiSetup() {
 		try {
@@ -314,7 +337,10 @@ class GuiSetup extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		bottomPanel.add(scrollPane, "");
-
+		
+		btnClear = new JButton("Clear");
+		inputPanel.add(btnClear);
+		
 		outputTextPane = new JTextPane();
 		scrollPane.setViewportView(outputTextPane);
 
